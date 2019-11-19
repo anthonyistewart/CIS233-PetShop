@@ -8,16 +8,15 @@ App = {
       var petsRow = $('#petsRow');
       var petTemplate = $('#petTemplate');
 
-      var initPrice = 1;
-
       for (i = 0; i < data.length; i ++) {
         petTemplate.find('.panel-title').text(data[i].name);
         petTemplate.find('img').attr('src', data[i].picture);
         petTemplate.find('.pet-breed').text(data[i].breed);
         petTemplate.find('.pet-age').text(data[i].age);
         petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.pet-price').text(`${initPrice} ETH`);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+        petTemplate.find('.pet-price').text(`${data[i].price} ETH`);
+        petTemplate.find('.btn-buy').attr('data-id', data[i].id);
+        //petTemplate.find('.btn-sell').attr('data-id', data[i].id);
 
         petsRow.append(petTemplate.html());
       }
@@ -67,7 +66,7 @@ App = {
   },
 
   bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
+    $(document).on('click', '.btn-buy', App.handleAdopt);
   },
 
   markAdopted: function(adopters, account) {

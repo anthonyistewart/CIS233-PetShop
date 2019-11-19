@@ -5,7 +5,7 @@ import "truffle/DeployedAddresses.sol";
 import "../contracts/Adoption.sol";
 
 contract TestAdoption {
-  uint initialBalance = 10 ether;
+  uint public initialBalance = 10 ether;
 
  // The address of the adoption contract to be tested
  Adoption adoption = Adoption(DeployedAddresses.Adoption());
@@ -13,18 +13,21 @@ contract TestAdoption {
  // The id of the pet that will be used for testing
  uint expectedPetId = 8;
 
+ // The price of the pet used for Testing
+ uint petPrice = 1 ether;
+
  //The expected owner of adopted pet is this contract
  address expectedAdopter = address(this);
 
  //Testing the adopt() function
  function testUserCanAdoptPet() public{
-   uint returnedId = adoption.adopt(expectedPetId);
+   uint returnedId = adoption.adopt.value(petPrice)(expectedPetId);
    Assert.equal(returnedId, expectedPetId, "Adoption of the expected pet should match what is returned.");
  }
 
  // Testing retrieval of a single pet's owner
  function testGetAdopterAddressByPetId() public {
-   address adopter = adoption.adopters(expectedPetId);
+   address adopter = adoption.getAdopter(expectedPetId);
    Assert.equal(adopter, expectedAdopter, "Owner of the expected pet should be this contract");
  }
  // Testing retrieval of all pet owners
