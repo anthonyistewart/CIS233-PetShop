@@ -14,9 +14,8 @@ App = {
         petTemplate.find('.pet-breed').text(data[i].breed);
         petTemplate.find('.pet-age').text(data[i].age);
         petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.pet-price').text(`${data[i].price} ETH`);
+        petTemplate.find('.pet-price').text(`${data[i].price} DogCoin`);
         petTemplate.find('.btn-buy').attr('data-id', data[i].id);
-        //petTemplate.find('.btn-sell').attr('data-id', data[i].id);
 
         petsRow.append(petTemplate.html());
       }
@@ -67,6 +66,31 @@ App = {
 
   bindEvents: function() {
     $(document).on('click', '.btn-buy', App.handleAdopt);
+    $(document).on('click', '.btn-buy-dogcoin', App.handleBuyDogCoin);
+    $(document).on('click', '.btn-update-balance', App.updateBalance);
+  },
+
+  //This function handles the buy dogcoin button press
+  handleBuyDogCoin: function(event){
+    event.preventDefault();
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+        
+        return adoptionInstance.buyDogCoin({from: account, value: web3.toWei('1', 'ether')});
+      }).then(function(result) {
+        return App.updateBalance();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   },
 
   markAdopted: function(adopters, account) {
@@ -84,6 +108,30 @@ App = {
     }).catch(function(err) {
       console.log(err.message);
     });
+  },
+
+  updateBalance: function(balance, account) {
+    var adoptionInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+    App.contracts.Adoption.deployed().then(function(instance) {
+      adoptionInstance = instance;
+
+      return adoptionInstance.getBalance(account);
+    }).then(function(balance) {
+      test = 40;
+      console.log("Updating balance.");
+      console.log(account);
+      console.log(balance.toString(10));
+      $(".panel-dogcoin").eq(0).find('.dogcoin-balance').text(`${balance.toNumber()} DogCoin`);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
   },
 
   handleAdopt: function(event) {
