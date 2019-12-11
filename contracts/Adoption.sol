@@ -10,9 +10,10 @@ contract BasicERC20 {
 }
 
 contract Adoption{
-
-contract ERC20Basic {
-
+  struct Pet {
+    uint petPrice;
+    address owner;
+  }
 
   mapping(uint => Pet) pets;
 
@@ -43,15 +44,12 @@ contract ERC20Basic {
     return petId;
   }
 
-  //Set the address for our ERC20 standard
-  constructor (address _t) public {
-        erc20 = ERC20Basic(_t);
-   }
-
-
-
   // Retrieving the adopters
   function getAdopters() public view returns (address[16] memory){
+    address[16] memory adopters;
+    for(uint i=0; i<16; i++){
+      adopters[i] = pets[i].owner;
+    }
     return adopters;
   }
 

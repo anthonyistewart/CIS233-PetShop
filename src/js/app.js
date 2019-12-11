@@ -83,7 +83,7 @@ App = {
 
       App.contracts.Adoption.deployed().then(function(instance) {
         adoptionInstance = instance;
-        
+
         return adoptionInstance.buyDogCoin({from: account, value: web3.toWei('1', 'ether')});
       }).then(function(result) {
         return App.updateBalance();

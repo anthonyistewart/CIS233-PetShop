@@ -1,9 +1,9 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.5.0;
 
 
-contract ERC20Basic {
+contract BasicERC20 {
 
-    string public constant name = "ERC20Basic";
+    string public constant name = "BasicERC20";
     string public constant symbol = "BSC";
     uint8 public constant decimals = 18;
 
@@ -44,7 +44,7 @@ contract ERC20Basic {
 
     function approve(address delegate, uint numTokens) public returns (bool) {
         allowed[msg.sender][delegate] = numTokens;
-        Approval(msg.sender, delegate, numTokens);
+        emit Approval(msg.sender, delegate, numTokens);
         return true;
     }
 
@@ -59,7 +59,7 @@ contract ERC20Basic {
         balances[owner] = balances[owner].sub(numTokens);
         allowed[owner][msg.sender] = allowed[owner][msg.sender].sub(numTokens);
         balances[buyer] = balances[buyer].add(numTokens);
-        Transfer(owner, buyer, numTokens);
+        emit Transfer(owner, buyer, numTokens);
         return true;
     }
 }
